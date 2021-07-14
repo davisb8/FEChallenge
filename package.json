@@ -1,0 +1,19 @@
+{
+  "name": "fechallenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davisb8/FEChallenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davisb8/FEChallenge/issues"
+  },
+  "homepage": "https://github.com/davisb8/FEChallenge#readme"
+}
