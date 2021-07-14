@@ -182,7 +182,9 @@ section {
   .btn-form-submit {
     margin: 12px 0 0 0;
   }
+}
 
+@media (max-width: 991px) {
   .btn-form-submit:hover{
     background: #F2DA56
   }
