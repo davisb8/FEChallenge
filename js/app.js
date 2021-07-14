@@ -1,23 +1,38 @@
 $(document).ready(function () {
 
+  $("#btn-email, #btn-phone-num").on("click", function (e) {
+    e.preventDefault();
+    var element = document.querySelector(".active");
+    if(element !== null){
+      element.classList.remove("active");
+    }
+    e.target.className +=  " active";
+    var placeholder = (e.target.id == 'btn-email') ? 'Enter an email address' : 'Enter a phone number';
+   $('.form-control')[0].placeholder = placeholder;
+  });
+
   $("#btn-search").on("click", function (e) {
     e.preventDefault();
     localStorage.clear(); //Clears storage for next request
-    email = $('input[type="text"]').val().toLowerCase();
+    var element = document.querySelector(".active");
 
-    var x, y;
-    regEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (email.match(regEx)) {
-      x = true;
+    var validPhoneNo = /^\d{10}$/;
+    var validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    regEx = (element.id == 'btn-email') ? validEmail : validPhoneNo;
+
+    text = $('input[type="text"]').val().toLowerCase();
+    var valid;
+    if (text.match(regEx)) {
+      valid = true;
     } else {
-      x = false;
+      valid = false;
     }
 
-    if (x === true) {
+    if (valid) {
+      const param = (element.id == 'btn-email') ? 'email=' : 'phone=';
+      let url = 'https://ltv-data-api.herokuapp.com/api/v1/records.json?' + param + text;
       document.querySelector('input[type="text"]').parentNode.classList.remove("error");
       const proxyurl = "";
-      const url =
-        'https://ltv-data-api.herokuapp.com/api/v1/records.json?email=' + email;
       fetch(proxyurl + url)
         .then((response) => response.text())
         .then(function (contents) {
@@ -25,7 +40,9 @@ $(document).ready(function () {
           window.location.href = "result.html";
         })
         .catch((e) => console.log(e));
-    } else if (x !== true) {
+    } else {
+      const errorMsg = (element.id == 'btn-email') ? 'Please enter a valid email address' : 'Please enter a valid phone number';
+      $('.error-msg').text(errorMsg);
       document.querySelector('input[type="text"]').parentNode.classList.add("error");
     }
   });

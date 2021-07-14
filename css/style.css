@@ -171,6 +171,28 @@ section {
   line-height: normal;
 }
 
+.search-type{
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.search-type p{
+  margin-right: 45px;
+}
+
+.search-type button{
+  margin-right: 10px;
+  border: 3px solid #f6bc33;
+  background: #124a80;
+  color: #f6bc33;
+}
+
+.search-type .active, button:hover{
+  background: #F6BC25;
+  color: #124a80;
+}
+
+
 @media (max-width: 767px) {
   .input-group {
     flex-direction: column;
@@ -184,6 +206,18 @@ section {
   }
   .btn-form-submit {
     margin: 12px 0 0 0;
+  }
+
+  /* .input-group.error .error-msg {
+    position: initial;
+  } */
+
+  .search-label{
+    display: none;
+  }
+
+  .search-type button{
+    width: 50%;
   }
 }
 
