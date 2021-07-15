@@ -7,9 +7,12 @@ $(document).ready(function () {
       element.classList.remove("active");
     }
     e.target.className +=  " active";
+    //reset the field
     const placeholder = (e.target.id == 'btn-email') ? 'Enter an email address' : 'Enter a phone number';
    $('.form-control')[0].placeholder = placeholder;
    $('.form-control')[0].value = '';
+   document.querySelector('input[type="text"]').parentNode.classList.remove("error");
+
   });
 
   $("#btn-search").on("click", function (e) {
