@@ -173,11 +173,14 @@ section {
 
 .search-type{
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .search-type p{
-  margin-right: 45px;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 30px;
+  font-weight: 300;
 }
 
 .search-type button{
@@ -187,11 +190,29 @@ section {
   color: #f6bc33;
 }
 
+.search-type .active::after{
+  content: '';
+  display: inline-block;
+
+  border-top: 8px solid #f6bc33;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid transparent;
+
+  position: relative;
+  right:60px;
+  bottom:-30px;
+
+}
+
 .search-type .active, button:hover{
   background: #F6BC25;
   color: #124a80;
 }
 
+.search-label{
+  color: white;
+}
 
 @media (max-width: 767px) {
   .input-group {
