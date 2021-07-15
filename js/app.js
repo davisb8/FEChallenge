@@ -2,35 +2,48 @@ $(document).ready(function () {
 
   $("#btn-email, #btn-phone-num").on("click", function (e) {
     e.preventDefault();
-    var element = document.querySelector(".active");
+    const element = document.querySelector(".active");
     if(element !== null){
       element.classList.remove("active");
     }
     e.target.className +=  " active";
-    var placeholder = (e.target.id == 'btn-email') ? 'Enter an email address' : 'Enter a phone number';
+    const placeholder = (e.target.id == 'btn-email') ? 'Enter an email address' : 'Enter a phone number';
    $('.form-control')[0].placeholder = placeholder;
+   $('.form-control')[0].value = '';
   });
 
   $("#btn-search").on("click", function (e) {
     e.preventDefault();
     localStorage.clear(); //Clears storage for next request
-    var element = document.querySelector(".active");
 
-    var validPhoneNo = /^\d{10}$/;
-    var validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    regEx = (element.id == 'btn-email') ? validEmail : validPhoneNo;
+    const element = document.querySelector(".active");
+    const text = $('input[type="text"]').val().toLowerCase();
 
-    text = $('input[type="text"]').val().toLowerCase();
-    var valid;
-    if (text.match(regEx)) {
-      valid = true;
-    } else {
-      valid = false;
+    const valid = isValid(element, text);
+    fetchResults(text, element, valid) ;
+  });
+
+  $('input[type="text"]').keypress(function (event) {
+    const element = document.querySelector(".active");
+    const text = $('input[type="text"]').val().toLowerCase();
+
+    const valid = isValid(element, text);
+    keycode = (event.keyCode ? event.keyCode : event.which); 
+    if (keycode == '13') { //On click Enter
+      /**
+       * Makes a request to ltv API to search an specific email address.
+       * If there's a response, it gets stored in the local storage and redirects to results page
+       */
+      event.preventDefault();
+      localStorage.clear(); //Clears storage for next request
+      fetchResults(text, element, valid) 
     }
+  });
 
+  const fetchResults = (text, element, valid) => {
     if (valid) {
       const param = (element.id == 'btn-email') ? 'email=' : 'phone=';
-      let url = 'https://ltv-data-api.herokuapp.com/api/v1/records.json?' + param + text;
+      const url = 'https://ltv-data-api.herokuapp.com/api/v1/records.json?' + param + text;
       document.querySelector('input[type="text"]').parentNode.classList.remove("error");
       const proxyurl = "";
       fetch(proxyurl + url)
@@ -45,44 +58,19 @@ $(document).ready(function () {
       $('.error-msg').text(errorMsg);
       document.querySelector('input[type="text"]').parentNode.classList.add("error");
     }
-  });
+  }
 
-  $('input[type="text"]').keypress(function (event) {
-    email = $('input[type="text"]').val().toLowerCase();
-    regEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (email.match(regEx)) {
-      x = true;
+  const isValid = (element, text) =>{
+    const validPhoneNo = /^\d{10}$/;
+    const validEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const regEx = (element.id == 'btn-email') ? validEmail : validPhoneNo;
+
+    let valid = false;
+    if (text.match(regEx)) {
+      valid = true;
       document.querySelector('input[type="text"]').parentNode.classList.remove("error");
-    } else {
-      x = false;
     }
-    keycode = (event.keyCode ? event.keyCode : event.which);
-    if (keycode == '13') {
-      /**
-       * Makes a request to ltv API to search an specific email address.
-       * If there's a response, it gets stored in the local storage and redirects to results page
-       */
-      event.preventDefault();
-      localStorage.clear(); //Clears storage for next request
-
-      var x, y;
-
-
-      if (x === true) {
-        const proxyurl = "";
-        const url =
-          'https://ltv-data-api.herokuapp.com/api/v1/records.json?email=' + email;
-        fetch(proxyurl + url)
-          .then((response) => response.text())
-          .then(function (contents) {
-            localStorage.setItem("userObject", contents);
-            window.location.href = "result.html";
-          })
-          .catch((e) => console.log(e));
-      } else if (x !== true) {
-        document.querySelector('input[type="text"]').parentNode.classList.add("error");
-      }
-    }
-  });
+    return valid; 
+  }
 
 });
